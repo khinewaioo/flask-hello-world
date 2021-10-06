@@ -10,7 +10,7 @@ orbs:
 workflows:
   sample: 
     jobs:
-      - build-and-test
+      - deploy-infrastructe
 jobs:
   build-and-test:
     docker:
@@ -22,3 +22,31 @@ jobs:
       - run:
           name: Run tests
           command: pytest
+  deploy-infrastructe:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Ensure back-end infrastructure exists
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/server.yml \
+              --tags project="udapeople" \
+              --stack-name "backend" \
+      #         BACKEND_IP=$(aws ec2 describe-instances \
+      #         --query 'Reservations[*].Instances[*].PublicIpAddress' \
+      #         --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID}" \
+      #         --output text)
+      #       curl -H "Content-Type: text/plain" -H "token: 63bb891f-21b3-4e53-a949-c1fc57b43346" --request PUT \
+      #       --data "$BACKEND_IP" https://api.memstash.io/values/BACKEND_IP
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       python3 -m venv venv
+      #       . venv/bin/activate
+      #       cd flask-hello-world
+      #       pip install -r requirements.txt
+
+            
+
