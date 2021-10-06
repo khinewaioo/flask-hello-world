@@ -10,7 +10,7 @@ orbs:
 workflows:
   sample: 
     jobs:
-      - deploy-infrastructe
+      - deploy-infrastructure
 jobs:
   build-and-test:
     docker:
@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Run tests
           command: pytest
-  deploy-infrastructe:
+  deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
     steps:
