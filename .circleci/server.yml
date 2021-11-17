@@ -19,7 +19,7 @@ Resources:
       InstanceType: t2.micro
       SecurityGroups:
         - Ref: InstanceSecurityGroup
-      KeyName: kwo_aws
+      KeyName: dx3-circle-ci
       ImageId: ami-0f2dd5fc989207c82 
       Tags:
         - Key: Name
