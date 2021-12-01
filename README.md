@@ -28,7 +28,7 @@ ansible-playbook playbook.yml
 # Ansible playbook for deploying a Flask app
 ---
 # Install system apt packages
-- hosts: localhost
+- hosts: webservers
   become: yes
   become_method: sudo
   tasks:
@@ -46,18 +46,68 @@ ansible-playbook playbook.yml
         - nginx
 
 # Install the app, note: don't do these tasks with become sudo
-- hosts: localhost
+- hosts: webservers
   tasks:
 
     - name: clone repository
       git:
-        repo: 'https://github.com/khinewaioo/flask-hello-world.git'
-        dest: /home/ubuntu/flask_app
+        repo: 'https://github.com/{{ github_user }}/{{ app_name }}.git'
+        dest: /home/{{ ansible_ssh_user }}/{{ app_name }}
         version: circleci-editor/circleci-project-setup
 
     - name: install modules in a virtualenv
       pip:
-        requirements: /home/ubuntu/flask_app/requirements.txt
-        virtualenv: /home/ubuntu/env
-        virtualenv_python: python3.8
+        requirements: /home/{{ ansible_ssh_user }}/{{ app_name }}/requirements.txt
+        virtualenv: /home/{{ ansible_ssh_user }}/{{ app_name }}/env
+       
+ - hosts: webservers
+  become: yes
+  become_method: sudo
+  tasks:
+
+  - name: template systemd service config
+    template:
+      src: .service
+      dest: /etc/systemd/system/{{ app_name }}.service
+
+  - name: start systemd app service
+    systemd: name={{ app_name }}.service state=restarted enabled=yes
+
+  - name: template nginx site config
+    template:
+      src: .nginx
+      dest: /etc/nginx/sites-available/{{ app_name }}
+
+  - name: remove default nginx site config
+    file: path=/etc/nginx/sites-enabled/default state=absent
+
+  - name: enable nginx site
+    file:
+      src: /etc/nginx/sites-available/{{ app_name }}
+      dest: /etc/nginx/sites-enabled/default
+      state: link
+      force: yes
+
+  - name: restart nginx
+    systemd: name=nginx state=restarted enabled=yes
+
+  - name: open firewall for nginx
+    ufw:
+      rule: allow
+      name: Nginx Full
+
+
+  # Run a quick test to verify the site is working
+- hosts: webservers
+  tasks:
+  - name: get url
+    get_url:
+      url: http://{{inventory_hostname}}
+      dest: /tmp/index.html
+  - name: read html
+    shell: cat /tmp/index.html
+    register: html_contents
+  - name: check for string in html
+    when: html_contents.stdout.find('hello') != -1
+    debug: msg="success!"
 ```
