@@ -9,4 +9,4 @@ The app in this repo is deployed at [https://flask.onrender.com](https://flask.o
 Follow the guide at https://render.com/docs/deploy-flask.
 
 ## Deployment on Ubuntu
-https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04.
+https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-16-04.
