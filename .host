@@ -1,0 +1,10 @@
+# Add hosts here
+[webservers]
+127.0.0.1
+
+
+[webservers:vars]
+ansible_connection=local
+ansible_ssh_user=ubuntu
+github_user=khinewaioo
+app_name=flask-hello-world
