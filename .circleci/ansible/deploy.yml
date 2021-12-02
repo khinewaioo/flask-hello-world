@@ -2,8 +2,7 @@
 ---
 # Install system apt packages
 - hosts: webservers
-  become: yes
-  become_method: sudo
+  user: ubuntu
   tasks: 
     - name: Update Cache
       apt:
@@ -20,6 +19,7 @@
 
 # Install the app, note: don't do these tasks with become sudo
 - hosts: webservers
+  user: ubuntu
   tasks:
 
     - name: clone repository
@@ -35,8 +35,7 @@
         virtualenv_python: python3.8
 
 - hosts: webservers
-  become: yes
-  become_method: sudo
+  user: ubuntu
   tasks:
   
   - name: template systemd service config
@@ -73,6 +72,7 @@
 
   # Run a quick test to verify the site is working
 - hosts: webservers
+  user: ubuntu
   tasks:
   - name: get url
     get_url:
