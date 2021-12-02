@@ -4,15 +4,15 @@
 - hosts: webservers
   become: yes
   become_method: sudo
-  tasks:
+  tasks: 
     - name: Update Cache
       apt:
-        update_cache: true
+        update_cache: true 
         cache_valid_time: 3600
         force_apt_get: true
-
+     
     - name: Install Dependencies
-      apt:
+      apt: 
        pkg:
         - python3-pip
         - python3-dev
@@ -27,17 +27,18 @@
         repo: 'https://github.com/{{ github_user }}/{{ app_name }}.git'
         dest: /home/{{ ansible_ssh_user }}/{{ app_name }}
         version: circleci-editor/circleci-project-setup
-
+        
     - name: install modules in a virtualenv
       pip:
         requirements: /home/{{ ansible_ssh_user }}/{{ app_name }}/requirements.txt
         virtualenv: /home/{{ ansible_ssh_user }}/{{ app_name }}/env
-       
- - hosts: webservers
+        virtualenv_python: python3.8
+
+- hosts: webservers
   become: yes
   become_method: sudo
   tasks:
-
+  
   - name: template systemd service config
     template:
       src: .service
@@ -45,7 +46,7 @@
 
   - name: start systemd app service
     systemd: name={{ app_name }}.service state=restarted enabled=yes
-
+ 
   - name: template nginx site config
     template:
       src: .nginx
@@ -53,17 +54,17 @@
 
   - name: remove default nginx site config
     file: path=/etc/nginx/sites-enabled/default state=absent
-
+  
   - name: enable nginx site
     file:
       src: /etc/nginx/sites-available/{{ app_name }}
       dest: /etc/nginx/sites-enabled/default
       state: link
       force: yes
-
+  
   - name: restart nginx
     systemd: name=nginx state=restarted enabled=yes
-
+  
   - name: open firewall for nginx
     ufw:
       rule: allow
