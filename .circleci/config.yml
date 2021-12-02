@@ -46,13 +46,9 @@ jobs:
   
   run-application:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: python:3.9.9-alpine3.15
     steps:
       - checkout
-      - run:
-          name: Installing dependencies
-          command: |
-            yum install -y tar gzip
       - run:
           name: Install dependencies
           command: |
