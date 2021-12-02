@@ -1,6 +1,6 @@
 # Add hosts here
 [webservers]
-
+hostname
 
 
 [webservers:vars]
