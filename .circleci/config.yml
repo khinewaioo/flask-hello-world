@@ -57,9 +57,9 @@ jobs:
           name: Add  to ansible inventory
           command: |
             cd .circleci/ansible/
-            instanceIP = curl -H "token: cd13d7a2-7b40-4d62-9865-c53fbca98029" --request GET https://api.memstash.io/values/Instance_IP
-            echo $instanceIP
-            sed -i 's/hostname/$instanceIP/g' .hosts
+            ip = curl -H "token: cd13d7a2-7b40-4d62-9865-c53fbca98029" --request GET https://api.memstash.io/values/Instance_IP
+            echo $ip
+            sed -i 's/hostname/52.194.253.125/g' .hosts
       - run:
           name: Configure server
           command: |
