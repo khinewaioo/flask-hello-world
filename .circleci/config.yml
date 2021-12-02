@@ -46,7 +46,7 @@ jobs:
   
   run-application:
     docker:
-      - image: python:3.9.9-alpine3.15
+      - image: 3.8.12-alpine3.15
     steps:
       - checkout
       - run:
