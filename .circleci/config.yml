@@ -11,6 +11,8 @@ workflows:
   sample: 
     jobs:
       - deploy-infrastructure
+      - run-application:
+          requires: [deploy-infrastructure]
 jobs:
   build-and-test:
     docker:
@@ -22,6 +24,7 @@ jobs:
       - run:
           name: Run tests
           command: pytest
+          
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
@@ -34,19 +37,33 @@ jobs:
               --template-file .circleci/server.yml \
               --tags project="udapeople" \
               --stack-name "backend" \
-      #         BACKEND_IP=$(aws ec2 describe-instances \
-      #         --query 'Reservations[*].Instances[*].PublicIpAddress' \
-      #         --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID}" \
-      #         --output text)
-      #       curl -H "Content-Type: text/plain" -H "token: 63bb891f-21b3-4e53-a949-c1fc57b43346" --request PUT \
-      #       --data "$BACKEND_IP" https://api.memstash.io/values/BACKEND_IP
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       python3 -m venv venv
-      #       . venv/bin/activate
-      #       cd flask-hello-world
-      #       pip install -r requirements.txt
+              Instance_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=dx3-learning" \
+              --output text)
+            curl -H "Content-Type: text/plain" -H "token: cd13d7a2-7b40-4d62-9865-c53fbca98029" --request PUT \
+            --data "$Instance_IP" https://api.memstash.io/values/Instance_IP
+  
+  run-application:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible 
+      - run:
+          name: Add  to ansible inventory
+          command: |
+            cd .circleci/ansible/
+            instanceIP = curl -H "token: cd13d7a2-7b40-4d62-9865-c53fbca98029" --request GET https://api.memstash.io/values/Instance_IP
+            sed -i 's/hostname/$instanceIP/g' .hosts
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible/
+            ansible-playbook playbook.yml -i .hosts
 
             
 
