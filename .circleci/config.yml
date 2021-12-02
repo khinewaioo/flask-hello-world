@@ -50,7 +50,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["7b2a32f46bddd5b94f75f8457206694e"]
+          fingerprints: ["7b:2a:32:f4:6b:dd:d5:b9:4f:75:f8:45:72:06:69:4e"]
       - run:
           name: Install dependencies
           command: |
