@@ -1,6 +1,6 @@
 # Add hosts here
 [webservers]
-hostname
+52.194.253.125
 
 
 [webservers:vars]
