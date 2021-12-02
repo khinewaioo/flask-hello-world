@@ -63,7 +63,7 @@ jobs:
           name: Configure server
           command: |
             cd .circleci/ansible/
-            ansible-playbook playbook.yml -i .hosts
+            ansible-playbook deploy.yml -i .hosts
 
             
 
