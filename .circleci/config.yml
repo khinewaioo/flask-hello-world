@@ -36,8 +36,8 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/server.yml \
               --tags project="udapeople" \
-              --stack-name "backend" \
-              Instance_IP=$(aws ec2 describe-instances \
+              --stack-name "backend" 
+            Instance_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=dx3-learning" \
               --output text)
