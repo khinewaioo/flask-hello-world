@@ -53,6 +53,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible 
+            apt install curl
       - run:
           name: Add  to ansible inventory
           command: |
