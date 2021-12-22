@@ -59,7 +59,7 @@ jobs:
           name: Configure server
           command: |
             cd .circleci/ansible/
-            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook deploy.yml -i .hosts
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -vvv deploy.yml -i .hosts
 
             
 
