@@ -32,13 +32,13 @@
     - name: clone repository
       git:
         repo: 'https://github.com/{{ github_user }}/{{ app_name }}.git'
-        dest: /home/{{ ansible_ssh_user }}/{{ app_name }}
+        dest: /home/ubuntu/{{ app_name }}
         version: circleci-editor/circleci-project-setup
         
     - name: install modules in a virtualenv
       pip:
-        requirements: /home/{{ ansible_ssh_user }}/{{ app_name }}/requirements.txt
-        virtualenv: /home/{{ ansible_ssh_user }}/{{ app_name }}/env
+        requirements: /home/ubuntu/{{ app_name }}/requirements.txt
+        virtualenv: /home/ubuntu/{{ app_name }}/env
         virtualenv_python: python3.8
 
 - hosts: webservers
