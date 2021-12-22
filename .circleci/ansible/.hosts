@@ -9,3 +9,6 @@ ansible_user=ubuntu
 ansible_ssh_user=ubuntu
 github_user=khinewaioo
 app_name=flask-hello-world
+
+[paramiko_connection]
+look_for_keys = False
