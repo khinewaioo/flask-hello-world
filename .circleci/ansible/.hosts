@@ -4,6 +4,7 @@
 
 
 [webservers:vars]
+ansible_user=ubuntu
 ansible_ssh_user=ubuntu
 github_user=khinewaioo
 app_name=flask-hello-world
