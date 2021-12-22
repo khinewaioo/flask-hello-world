@@ -37,12 +37,7 @@ jobs:
               --template-file .circleci/server.yml \
               --tags project="udapeople" \
               --stack-name "backend" 
-            Instance_IP=$(aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name,Values=dx3-learning" \
-              --output text)
-            curl -H "Content-Type: text/plain" -H "token: cd13d7a2-7b40-4d62-9865-c53fbca98029" --request PUT \
-            --data "$Instance_IP" https://api.memstash.io/values/Instance_IP
+
   
   run-application:
     docker:
